@@ -1,0 +1,21 @@
+[package]
+name = "tour_masters"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+diesel = { version = "~2.2.4", features = ["postgres", "r2d2", "uuid"] }
+rocket = { version = "~0.5.1", features = ["json"] }
+dotenvy = "~0.15.7"
+serde = "~1.0.209"
+uuid = { version = "~1.10.0", features = ["v4", "serde"] }
+#pear_codegen = "0.2.9"
+
+[dependencies.rocket_dyn_templates]
+features = ["handlebars"]
+
+#[dependencies.rocket_contrib]
+#default-features = false
+#features = ["json"]
