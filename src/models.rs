@@ -4,11 +4,10 @@
 #![allow(clippy::all)]
 
 use crate::schema::*;
+use rocket::serde::*;
 
 use uuid::Uuid;
 use diesel::prelude::*;
-use rocket::serde::{Serialize, Deserialize};
-
 #[derive(Insertable, Queryable, Debug, Identifiable, Serialize, Deserialize)]
 #[diesel(primary_key(venueid))]
 #[diesel(table_name = venue)]
@@ -21,7 +20,7 @@ pub struct Venue {
     pub postalcode: Option<String>,
     pub country: Option<String>,
     pub phone: Option<String>,
-    pub latitude: Option<i32>,
-    pub longitude: Option<i32>,
+    pub latitude: Option<String>,
+    pub longitude: Option<String>,
 }
 

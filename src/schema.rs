@@ -15,7 +15,9 @@ diesel::table! {
         country -> Nullable<Varchar>,
         #[max_length = 50]
         phone -> Nullable<Varchar>,
-        latitude -> Nullable<Int4>,
-        longitude -> Nullable<Int4>,
+        #[max_length = 20]
+        latitude -> Nullable<Varchar>,
+        #[max_length = 20]
+        longitude -> Nullable<Varchar>,
     }
 }
