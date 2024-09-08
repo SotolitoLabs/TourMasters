@@ -5,6 +5,41 @@ Application for managing tours
 
 podman, make, rust, cargo, libpq
 
+### Dependency Installation
+
+#### Mac OS X
+
+**Rust**
+
+* https://www.rust-lang.org/tools/install
+
+```bash
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+$ export PATH=$PATH:~/.cargo/bin
+```
+
+**Podman**
+
+* https://podman.io/docs/installation
+
+Using brew:
+
+```bash
+$ brew install podman
+```
+
+**libpq**
+
+`libpq` is the client library for `PostgreSQL`
+
+Installation using brew.
+
+* https://formulae.brew.sh/formula/libpq
+
+```bash
+$ brew install libpq
+```
+
 ## Development
 
 ### Run it
