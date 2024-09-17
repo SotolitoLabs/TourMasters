@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 diesel = { version = "~2.2.4", features = ["postgres", "r2d2", "uuid"] }
-rocket = { version = "~0.5.1", features = ["json"] }
+rocket = { version = "~0.5.1", features = ["json", "uuid"] }
 dotenvy = "~0.15.7"
 serde = "~1.0.209"
 uuid = { version = "~1.10.0", features = ["v4", "serde"] }
@@ -16,6 +16,6 @@ uuid = { version = "~1.10.0", features = ["v4", "serde"] }
 [dependencies.rocket_dyn_templates]
 features = ["handlebars"]
 
-#[dependencies.rocket_contrib]
-#default-features = false
-#features = ["json"]
+[dependencies.rocket_sync_db_pools]
+version = "0.1.0"
+features = ["diesel_postgres_pool", "postgres_pool"]
