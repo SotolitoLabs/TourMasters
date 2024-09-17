@@ -12,7 +12,7 @@
         New Venues
         <ul>
             {{#each venues}}
-            <li>ID: {{ this.venueid }}</li>
+            <li>ID: <a href="/venues/{{ this.id }}">{{ this.id }}</a></li>
             <li>Name: {{ this.name }}</li>
             {{else}}
             <p> No venues yet</p>
