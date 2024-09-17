@@ -4,15 +4,30 @@
 #![allow(clippy::all)]
 
 use crate::schema::*;
-use rocket::serde::*;
+use rocket::serde::{ Deserialize, Serialize };
 
+use chrono::NaiveDateTime;
 use uuid::Uuid;
 use diesel::prelude::*;
-#[derive(Insertable, Queryable, Debug, Identifiable, Serialize, Deserialize)]
-#[diesel(primary_key(venueid))]
+#[derive(Clone, Debug, Identifiable, Queryable, Insertable, Serialize, Deserialize)]
+#[diesel(table_name = users)]
+pub struct User {
+    pub id: Uuid,
+    pub name: Option<String>,
+    pub email: String,
+    pub password: Option<String>,
+    pub oauth_provider: String,
+    pub oauth_user_id: String,
+    pub access_token: String,
+    pub refresh_token: Option<String>,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+
+#[derive(Clone, Debug, Identifiable, Queryable, Insertable, Serialize, Deserialize)]
 #[diesel(table_name = venue)]
 pub struct Venue {
-    pub venueid: Uuid,
+    pub id: Uuid,
     pub name: Option<String>,
     pub contactname: Option<String>,
     pub address: Option<String>,
