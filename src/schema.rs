@@ -1,8 +1,23 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    venue (venueid) {
-        venueid -> Uuid,
+    users (id) {
+        id -> Uuid,
+        name -> Nullable<Text>,
+        email -> Text,
+        password -> Nullable<Text>,
+        oauth_provider -> Text,
+        oauth_user_id -> Text,
+        access_token -> Text,
+        refresh_token -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    venue (id) {
+        id -> Uuid,
         name -> Nullable<Text>,
         #[max_length = 255]
         contactname -> Nullable<Varchar>,
@@ -21,3 +36,8 @@ diesel::table! {
         longitude -> Nullable<Varchar>,
     }
 }
+
+diesel::allow_tables_to_appear_in_same_query!(
+    users,
+    venue,
+);
