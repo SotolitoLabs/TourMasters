@@ -17,8 +17,8 @@ fn rocket() -> _ {
     rocket::build()
         .mount("/venues", routes![venues::add])
         .mount("/venues", routes![venues::list])
-        /*.mount("/venues", routes![venues::get])
-        .mount("/venues", routes![venues::delete])*/
+        .mount("/venues", routes![venues::get])
+        .mount("/venues", routes![venues::delete])
         .mount("/public", FileServer::from(STATIC_FILES_DIR))
         .attach(Template::fairing())
         .attach(db::TourDB::fairing())
