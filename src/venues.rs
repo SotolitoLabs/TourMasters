@@ -4,14 +4,11 @@ use rocket::serde::{json::Json, Deserialize, Serialize};
 use rocket::serde::uuid::Uuid;
 use rocket::{get, post, delete};
 use rocket_dyn_templates::{context, Template};
-//use uuid::Uuid;
-//https://rocket.rs/guide/v0.5/requests/
 use crate::db::*;
 use crate::models::Venue;
 use crate::schema::venue::dsl::*;
 use rocket_sync_db_pools::diesel;
 use rocket::response::status::NotFound;
-
 
 type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
 
@@ -54,7 +51,7 @@ Result<Json<Vec<Venue>>, NotFound<String>> {
         crate::schema::venue::dsl::venue
             .filter(id.eq(venueid))
             .load::<Venue>(connection)
-            .expect("Error loading venues")
+        .expect("Error loading venues")
     ).await;
     if results.len() > 0 {
         Ok(Json(results))
