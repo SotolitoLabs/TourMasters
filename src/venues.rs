@@ -10,6 +10,8 @@ use crate::db::*;
 use crate::models::Venue;
 use crate::schema::venue::dsl::*;
 use rocket_sync_db_pools::diesel;
+use rocket::response::status::NotFound;
+
 
 type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
 
@@ -43,27 +45,38 @@ pub async fn list(mut tdb: TourDB) -> Template {
     ).await;
     Template::render("venues", context! {venues: &results, count: results.len()})
 }
-/*
+
 /// Get a venue and returns it as a JSON object
 #[get("/<venueid>")]
-pub fn get(venueid: Uuid) -> Json<Vec<Venue>> {
-    let connection = &mut establish_connection_pg();
-    let results = crate::schema::venue::dsl::venue
-        .filter(id.eq(venueid))
-        .load::<Venue>(connection)
-        .expect("Error loading venues");
-    Json(results)
+pub async fn get(venueid: Uuid, mut tdb: TourDB) ->
+Result<Json<Vec<Venue>>, NotFound<String>> {
+    let results = tdb.run(move |connection|
+        crate::schema::venue::dsl::venue
+            .filter(id.eq(venueid))
+            .load::<Venue>(connection)
+            .expect("Error loading venues")
+    ).await;
+    if results.len() > 0 {
+        Ok(Json(results))
+    } else {
+        Err(NotFound(format!("Could not find venue: {}", venueid)))
+    }
 }
 
 /// Remove a venue
 #[delete("/<venueid>")]
-pub fn delete(venueid: Uuid) -> Json<Vec<Venue>> {
-    let connection = &mut establish_connection_pg();
-    let results = crate::schema::venue::dsl::venue
-        .filter(id.eq(venueid))
-        .load::<Venue>(connection)
-        .expect("Error loading venues");
-    Json(results)
+pub async fn delete(venueid: Uuid, mut tdb: TourDB) ->
+Result<Json<String>, NotFound<String>> {
+    let results = tdb.run(move |connection|
+        diesel::delete(
+            crate::schema::venue::dsl::venue
+                .filter(id.eq(venueid)))
+            .execute(connection)
+    ).await;
+    if results.unwrap() == 1 {
+        Ok(Json(format!("{} deleted", venueid)))
+    } else {
+        Err(NotFound(format!("Could not find venue: {}", venueid)))
+    }
 }
-*/
 
