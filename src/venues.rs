@@ -1,21 +1,23 @@
 use diesel::prelude::*;
 use rocket::response::{status::Created, Debug};
-use rocket::serde::{json::Json, Deserialize, Serialize};
+use rocket::serde::json::Json;
 use rocket::serde::uuid::Uuid;
 use rocket::{get, post, delete};
 use rocket_dyn_templates::{context, Template};
-use crate::db::*;
-use crate::models::Venue;
-use crate::schema::venue::dsl::*;
 use rocket_sync_db_pools::diesel;
 use rocket::response::status::NotFound;
+use crate::db::*;
+use crate::claims::Claims;
+use crate::models::Venue;
+use crate::schema::venue::dsl::*;
 
 type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
 
 /// Creates a venue
 #[post("/add", format = "json", data = "<arg_venue>")]
 //pub async fn add(mut arg_venue: Json<Venue>, mut tdb: TourDB) -> Result<Created<Json<Venue>>> {
-pub async fn add(mut arg_venue: Json<Venue>, mut tdb: TourDB) -> Result<Created<Json<Uuid>>> {
+pub async fn add(arg_venue: Json<Venue>, user: Claims, tdb: TourDB) ->
+Result<Created<Json<Uuid>>> {
     let mut new_venue: Venue = arg_venue.into_inner();
     new_venue.id = Uuid::new_v4();
     let ret_id = new_venue.id.clone();
@@ -33,8 +35,8 @@ pub async fn add(mut arg_venue: Json<Venue>, mut tdb: TourDB) -> Result<Created<
 
 /// Show the list of venues in HTML
 #[get("/")]
-pub async fn list(mut tdb: TourDB) -> Template {
-    let mut results =
+pub async fn list(tdb: TourDB) -> Template {
+    let results =
     tdb.run(move |connection| 
         crate::schema::venue::dsl::venue
             .load::<Venue>(connection)
@@ -45,7 +47,7 @@ pub async fn list(mut tdb: TourDB) -> Template {
 
 /// Get a venue and returns it as a JSON object
 #[get("/<venueid>")]
-pub async fn get(venueid: Uuid, mut tdb: TourDB) ->
+pub async fn get(venueid: Uuid, tdb: TourDB) ->
 Result<Json<Vec<Venue>>, NotFound<String>> {
     let results = tdb.run(move |connection|
         crate::schema::venue::dsl::venue
@@ -62,7 +64,7 @@ Result<Json<Vec<Venue>>, NotFound<String>> {
 
 /// Remove a venue
 #[delete("/<venueid>")]
-pub async fn delete(venueid: Uuid, mut tdb: TourDB) ->
+pub async fn delete(venueid: Uuid, user: Claims, tdb: TourDB) ->
 Result<Json<String>, NotFound<String>> {
     let results = tdb.run(move |connection|
         diesel::delete(
