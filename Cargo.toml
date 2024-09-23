@@ -12,6 +12,8 @@ dotenvy = "~0.15.7"
 serde = "~1.0.209"
 uuid = { version = "~1.10.0", features = ["v4", "serde"] }
 chrono = { version = "~0.4.38", features = ["serde"] }
+jsonwebtoken = { version = "9.3.0", default-features = false }
+lazy_static = "1.5.0"
 
 [dependencies.rocket_dyn_templates]
 features = ["handlebars"]
