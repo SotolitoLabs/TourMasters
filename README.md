@@ -50,10 +50,18 @@ make run
 
 ### Test
 
-* Add a venue
+* Get JWT token
 
 ```bash
-$ curl -X POST -H 'Content-type: application/json' -d @tests/data/new_venue.json http://127.0.0.1:8000/venues/add
+TOKEN=$(curl -s --request POST --data '{"user": "test", "password": "prueba123"}' http://127.0.0.1:8000/login | jq -r '.token')
+```
+
+* Add a venue using an authenticated user
+
+```bash
+$ curl -X POST -H "Authorization: Bearer $TOKEN" \
+    -H 'Content-type: application/json' \
+    -d @tests/data/new_venue.json http://127.0.0.1:8000/venues/add
 ```
 
 * List venues
@@ -61,6 +69,20 @@ $ curl -X POST -H 'Content-type: application/json' -d @tests/data/new_venue.json
 ```bash
 $ curl http://127.0.0.1:8000/venues
 
+```
+
+* Get a venue
+
+```bash
+$ curl http://127.0.0.1:8000/venues/af20c605-c8e2-4c33-8311-2ff4b77991aa
+
+```
+
+* Delete a venues
+
+```bash
+$ curl -H "Authorization: Bearer $TOKEN" -X DELETE \
+    http://127.0.0.1:8000/venues/af20c605-c8e2-4c33-8311-2ff4b77991aa
 ```
 
 * Get a static file
