@@ -29,7 +29,7 @@ BEGIN
 END; 
 $$;
 
--- Function for check password hashes
+-- Function for checking password hashes
 CREATE OR REPLACE FUNCTION check_pw_hash(password TEXT, hash TEXT)
 RETURNS TEXT LANGUAGE plpgsql AS $$
 DECLARE
@@ -37,6 +37,20 @@ DECLARE
 BEGIN
     SELECT INTO generated_hash crypt(password, hash);
     IF generated_hash = hash THEN
+        return true;
+    END IF;
+    RETURN false;
+END; 
+$$;
+
+-- Function for checking user passwords
+CREATE OR REPLACE FUNCTION check_pw(user_email TEXT, user_password TEXT)
+RETURNS TEXT LANGUAGE plpgsql AS $$
+DECLARE
+    pw_hash TEXT;
+BEGIN
+    SELECT password INTO pw_hash from Users where email = user_email;
+    IF check_pw_hash(user_password, pw_hash) THEN
         return true;
     END IF;
     RETURN false;
