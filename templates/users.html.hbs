@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourmasters::Users</title>
+</head>
+<body>
+    <section id="hello">
+        <h1>Venues</h1>
+        Venues:
+        <ul>
+            {{#each users}}
+            <li>ID: <a href="/users/{{ this.id }}">{{ this.id }}</a></li>
+            <li>Name: {{ this.name }}</li>
+            {{else}}
+            <p> No users yet</p>
+            {{/each}}
+        </ul>
+        <h3>Total: {{ len users }}</h3>
+    </section>
+</body>
+</html>
