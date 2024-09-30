@@ -61,7 +61,7 @@ TOKEN=$(curl -s --request POST --data '{"user": "test", "password": "prueba123"}
 ```bash
 $ curl -X POST -H "Authorization: Bearer $TOKEN" \
     -H 'Content-type: application/json' \
-    -d @tests/data/new_venue.json http://127.0.0.1:8000/venues/add
+    -d @api_data/new_venue.json http://127.0.0.1:8000/venues/add
 ```
 
 * List venues
