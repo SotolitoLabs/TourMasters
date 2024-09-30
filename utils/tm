@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# CLI interface for TourMasters
+DATA_DIR="api_data"
+HOST="http://127.0.0.1:8000"
+JSON_VENUE_FILE="new_venue.json"
+TOKEN=""
+
+function usage() {
+cat << EOF
+usage: tm [-a] [-d] [-g] [-l] [-h] [-v]
+
+Command line interface for TourMasters API
+
+Subcommands:
+
+venues Manage venues
+users  Manage users
+
+EOF
+exit 0
+}
+
+
+function venues {
+    action="$1_venue"
+    eval $action $2
+}
+
+function get_token {
+    TOKEN=$(curl -s --request POST --data '{"user": "test", "password": "prueba123"}' http://127.0.0.1:8000/login | jq -r '.token')
+}
+
+# Adds test data
+function add_venue {
+    echo "Adding ${JSON_VENUE_FILE}"
+    curl -s -X POST -H "Authorization: Bearer ${TOKEN}" \
+        -H 'Content-type: application/json' \
+        -d @${DATA_DIR}/${JSON_VENUE_FILE} ${HOST}/venues/add
+    echo
+}
+
+# Get venue list
+function list_venue {
+    curl -s http://127.0.0.1:8000/venues
+}
+
+# Get venue list
+function get_venue {
+    UUID=$1
+    echo "Getting venue: ${UUID}"
+    curl -s http://127.0.0.1:8000/venues/${UUID} | jq
+    echo
+}
+
+if [[ $1 == "" ]]; then
+    usage
+fi
+
+# Get the JWT authentication token
+get_token
+
+case $1 in
+      venues)
+            venues $2 $3
+        ;;
+      users)
+            users $2 $3
+        ;;
+esac
