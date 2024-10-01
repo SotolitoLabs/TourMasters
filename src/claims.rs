@@ -1,9 +1,7 @@
 /// Authentication implementation
-
 use chrono::{Duration, Utc};
 use jsonwebtoken::{
-    decode, encode, errors::ErrorKind, EncodingKey, DecodingKey, Header,
-    Validation
+    decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, Validation,
 };
 use lazy_static::lazy_static;
 use rocket::{
@@ -33,7 +31,6 @@ pub enum AuthenticationError {
     Expired,
 }
 
-
 /// jsonwebtoken Claim
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -44,20 +41,18 @@ pub struct Claims {
 
 //Rocket request guard
 #[rocket::async_trait]
-impl <'r> FromRequest<'r> for Claims {
+impl<'r> FromRequest<'r> for Claims {
     type Error = AuthenticationError;
-    async fn from_request(request: &'r rocket::Request<'_>) ->
-    Outcome<Self, Self::Error> {
-         match request.headers().get_one(AUTHORIZATION) {
-                Some(v) => match Claims::from_authorization(v) {
-                    Ok(c)  => Outcome::Success(c),
-                    Err(e) => Outcome::Error((Status::Forbidden, e)),
-                },
-                None    => Outcome::Error((Status::Forbidden, AuthenticationError::Missing)),
+    async fn from_request(request: &'r rocket::Request<'_>) -> Outcome<Self, Self::Error> {
+        match request.headers().get_one(AUTHORIZATION) {
+            Some(v) => match Claims::from_authorization(v) {
+                Ok(c) => Outcome::Success(c),
+                Err(e) => Outcome::Error((Status::Forbidden, e)),
+            },
+            None => Outcome::Error((Status::Forbidden, AuthenticationError::Missing)),
         }
     }
 }
-
 
 /// Claims implementation
 impl Claims {
@@ -73,7 +68,7 @@ impl Claims {
     fn from_authorization(value: &str) -> Result<Self, AuthenticationError> {
         let token = match value.strip_prefix(BEARER).map(str::trim) {
             Some(t) => t,
-            None    => return Err(AuthenticationError::Missing),
+            None => return Err(AuthenticationError::Missing),
         };
 
         // Get claims from a JWT
@@ -81,7 +76,8 @@ impl Claims {
             token,
             &DecodingKey::from_secret(SECRET.as_ref()),
             &Validation::default(), //TODO check this defaults
-        ).map_err(|e| match e.kind() {
+        )
+        .map_err(|e| match e.kind() {
             ErrorKind::ExpiredSignature => AuthenticationError::Expired,
             //TODO: check if we have different responses for each error
             _ => AuthenticationError::Decoding(e.to_string()),
@@ -108,5 +104,4 @@ impl Claims {
 
         Ok(token)
     }
-    
 }
