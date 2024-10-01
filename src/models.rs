@@ -4,11 +4,11 @@
 #![allow(clippy::all)]
 
 use crate::schema::*;
-use rocket::serde::{ Deserialize, Serialize };
+use rocket::serde::{Deserialize, Serialize};
 
 use chrono::NaiveDateTime;
-use uuid::Uuid;
 use diesel::prelude::*;
+use uuid::Uuid;
 #[derive(Clone, Debug, Identifiable, Queryable, Insertable, Serialize, Deserialize)]
 #[diesel(table_name = users)]
 pub struct User {
@@ -38,4 +38,3 @@ pub struct Venue {
     pub latitude: Option<String>,
     pub longitude: Option<String>,
 }
-
