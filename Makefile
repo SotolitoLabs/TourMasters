@@ -18,4 +18,5 @@ run: dirs
 		-p 127.0.0.1:9432:5432 ghcr.io/enterprisedb/postgresql:16
 	cargo run
 
-
+clean:
+	cargo clean
