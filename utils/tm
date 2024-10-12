@@ -16,6 +16,7 @@ Subcommands:
 
 venues Manage venues
 users  Manage users
+tokens  Manage tokens
 
 EOF
 exit 0
@@ -25,6 +26,15 @@ exit 0
 function venues {
     action="$1_venue"
     eval $action $2
+}
+
+function tokens {
+    action="$1_token"
+    eval $action $2
+}
+
+function show_token {
+    echo $TOKEN
 }
 
 function get_token {
@@ -67,4 +77,8 @@ case $1 in
       users)
             users $2 $3
         ;;
+      tokens)
+            tokens $2 $3
+        ;;
+        *) usage
 esac
