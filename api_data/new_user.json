@@ -1,0 +1,13 @@
+{
+    "id": "ff9766d1-a341-47bf-892b-6b86d5577846",
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "prueba345",
+    "oauth_provider": "none",
+    "oauth_user_id": "none",
+    "access_token": "N/A",
+    "refresh_token": "N/A",
+    "created_at": "2024-09-25T04:45:12.665260",
+    "updated_at": "2024-09-25T04:45:12.665260"
+}
+
