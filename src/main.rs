@@ -11,6 +11,7 @@ pub mod db;
 pub mod models;
 pub mod schema;
 pub mod venues;
+pub mod users;
 
 pub static STATIC_FILES_DIR: &str = "www/static";
 
@@ -21,6 +22,10 @@ fn rocket() -> _ {
         .mount(
             "/venues",
             routes![venues::add, venues::delete, venues::get, venues::list],
+        )
+        .mount(
+            "/users",
+            routes![users::add, users::delete, users::get, users::list],
         )
         .mount("/public", FileServer::from(STATIC_FILES_DIR))
         .attach(Template::fairing())
