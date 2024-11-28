@@ -9,7 +9,7 @@
 ./data: 
 	mkdir data
 
-dirs: www/static data .env
+dirs: .env | www/static data
 
 run: dirs
 	podman run -d --replace --name=tourmasters_pg                               \
